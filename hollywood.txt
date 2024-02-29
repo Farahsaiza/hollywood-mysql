@@ -1,0 +1,451 @@
+Enter password 
+Welcome to the MySQL monitor.  Commands end with ; or g.
+Your MySQL connection id is 20
+Server version 8.0.36 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle andor its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation andor its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or 'h' for help. Type 'c' to clear the current input statement.
+
+mysql show databases;
++--------------------+
+ Database           
++--------------------+
+ centreformation    
+ information_schema 
+ isgi               
+ mysql              
+ performance_schema 
+ sakila             
+ sys                
+ test3              
+ tramway            
+ world              
++--------------------+
+10 rows in set (0.09 sec)
+
+mysql create database Hollywood;
+Query OK, 1 row affected (0.10 sec)
+
+mysql show databases;
++--------------------+
+ Database           
++--------------------+
+ centreformation    
+ hollywood          
+ information_schema 
+ isgi               
+ mysql              
+ performance_schema 
+ sakila             
+ sys                
+ test3              
+ tramway            
+ world              
++--------------------+
+11 rows in set (0.00 sec)
+
+mysql use hollywood
+Database changed
+mysql create table film(
+    - id film int primary key,
+    - titre varchar(30) ,
+    - realisateur varchar(40),
+    - scenariste varchar(40));
+ERROR 1064 (42000) You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'film int primary key,
+titre varchar(30) ,
+realisateur varchar(40),
+scenariste va' at line 2
+mysql create table film(
+    - idfilm int,
+    - titre  varchar(40),
+    - realisateur varchar(40),
+    - scenariste varchar(40),
+    - primary key(idfilm));
+Query OK, 0 rows affected (1.23 sec)
+
+mysql desc film;
++-------------+-------------+------+-----+---------+-------+
+ Field        Type         Null  Key  Default  Extra 
++-------------+-------------+------+-----+---------+-------+
+ idfilm       int          NO    PRI  NULL           
+ titre        varchar(40)  YES        NULL           
+ realisateur  varchar(40)  YES        NULL           
+ scenariste   varchar(40)  YES        NULL           
++-------------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql insert into film values
+    - (1,wj3 trab,mohammed,
+    - ;
+ERROR 1064 (42000) You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql alter table film
+    - add column annef int ;
+Query OK, 0 rows affected (0.42 sec)
+Records 0  Duplicates 0  Warnings 0
+
+mysql alter table film
+    - add column idfilmOrg int;
+Query OK, 0 rows affected (0.26 sec)
+Records 0  Duplicates 0  Warnings 0
+
+mysql alter table film
+    - add foreign key (idfilmOrg) references film(idfilm);
+Query OK, 0 rows affected (2.46 sec)
+Records 0  Duplicates 0  Warnings 0
+
+mysql desc filmm;
+ERROR 1146 (42S02) Table 'hollywood.filmm' doesn't exist
+mysql desc film;
++-------------+-------------+------+-----+---------+-------+
+ Field        Type         Null  Key  Default  Extra 
++-------------+-------------+------+-----+---------+-------+
+ idfilm       int          NO    PRI  NULL           
+ titre        varchar(40)  YES        NULL           
+ realisateur  varchar(40)  YES        NULL           
+ scenariste   varchar(40)  YES        NULL           
+ annef        int          YES        NULL           
+ idfilmOrg    int          YES   MUL  NULL           
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.03 sec)
+
+mysql insert into film values
+    - (1,wj3 trab,mohamed baraka,tahour,2012,1);
+Query OK, 1 row affected (0.09 sec)
+
+mysql selct from film;
+ERROR 1064 (42000) You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct from film' at line 1
+mysql select  from film;
++--------+----------+----------------+------------+-------+-----------+
+ idfilm  titre     realisateur     scenariste  annef  idfilmOrg 
++--------+----------+----------------+------------+-------+-----------+
+      1  wj3 trab  mohamed baraka  tahour       2012          1 
++--------+----------+----------------+------------+-------+-----------+
+1 row in set (0.00 sec)
+
+mysql create table acteur;
+ERROR 4028 (HY000) A table must have at least one visible column.
+mysql create table acteur(
+    - nom varchar(40),
+    - prenom varchar (40),
+    - DateNaissance  date,
+    - poid float,
+    - taille  float,
+    - primary key (nom,prenom));
+Query OK, 0 rows affected (0.76 sec)
+
+mysql insert into acteur values
+    - (farah,saiza,2002-01-31,70.5,1.65);
+Query OK, 1 row affected (0.11 sec)
+
+mysql desc acteur;
++---------------+-------------+------+-----+---------+-------+
+ Field          Type         Null  Key  Default  Extra 
++---------------+-------------+------+-----+---------+-------+
+ nom            varchar(40)  NO    PRI  NULL           
+ prenom         varchar(40)  NO    PRI  NULL           
+ DateNaissance  date         YES        NULL           
+ poid           float        YES        NULL           
+ taille         float        YES        NULL           
++---------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql select from acteur;
++-------+--------+---------------+------+--------+
+ nom    prenom  DateNaissance  poid  taille 
++-------+--------+---------------+------+--------+
+ farah  saiza   2002-01-31     70.5    1.65 
++-------+--------+---------------+------+--------+
+1 row in set (0.00 sec)
+
+mysql create table ActeurFilm(
+    - idfilm int,
+    - nom varchar(40),
+    - prenom  varchar(40),
+    - foreign key (nom,prenom) references acteur(nom,prenom));
+Query OK, 0 rows affected (0.68 sec)
+
+mysql alter table  ActeurFilm
+    - add foreign key (idfilm) references film(idfilm);
+Query OK, 0 rows affected (2.24 sec)
+Records 0  Duplicates 0  Warnings 0
+
+mysql alter table acteurfilm
+    - add primary key (nom,prenom, idfilm);
+Query OK, 0 rows affected (1.26 sec)
+Records 0  Duplicates 0  Warnings 0
+
+mysql desc acteurfilm  ;
++--------+-------------+------+-----+---------+-------+
+ Field   Type         Null  Key  Default  Extra 
++--------+-------------+------+-----+---------+-------+
+ idfilm  int          NO    PRI  NULL           
+ nom     varchar(40)  NO    PRI  NULL           
+ prenom  varchar(40)  NO    PRI  NULL           
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql create table producteur(
+    - nomprod varchar(40) primary  key,
+    - adresse varchar(40));
+Query OK, 0 rows affected (0.44 sec)
+
+mysql insert into producteur values
+    - (fatmi, marrakech);
+Query OK, 1 row affected (0.09 sec)
+
+mysql create table filmProd (
+    - idfilm int ,
+    - nomprod varchar(40),
+    - montant int,
+    - primary key(idfilm , nomprod),
+    - foreign key(idfilm) references film  (idfilm),
+    - foreign key(nomprod) references producteur (nomprod));
+Query OK, 0 rows affected (1.80 sec)
+
+mysql desc filmprod;
++---------+-------------+------+-----+---------+-------+
+ Field    Type         Null  Key  Default  Extra 
++---------+-------------+------+-----+---------+-------+
+ idfilm   int          NO    PRI  NULL           
+ nomprod  varchar(40)  NO    PRI  NULL           
+ montant  int          YES        NULL           
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql create table  revenue(
+    - idrevenu int,
+    - cachet  int,
+    - poucentage float,
+    - anne int,
+    - nom  varchar(40),
+    - prenom varchar(40),
+    - foreign key (nom,prenom)references  acteur(nom,prenom));
+Query OK, 0 rows affected (0.54 sec)
+
+mysql desc revenue;
++------------+-------------+------+-----+---------+-------+
+ Field       Type         Null  Key  Default  Extra 
++------------+-------------+------+-----+---------+-------+
+ idrevenu    int          YES        NULL           
+ cachet      int          YES        NULL           
+ poucentage  float        YES        NULL           
+ anne        int          YES        NULL           
+ nom         varchar(40)  YES   MUL  NULL           
+ prenom      varchar(40)  YES        NULL           
++------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql show create table revenue;
++---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+ Table    Create Table                                                                                                                                                                                                                                                                                                                                                                                                                 
++---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+ revenue  CREATE TABLE `revenue` (
+  `idrevenu` int DEFAULT NULL,
+  `cachet` int DEFAULT NULL,
+  `poucentage` float DEFAULT NULL,
+  `anne` int DEFAULT NULL,
+  `nom` varchar(40) DEFAULT NULL,
+  `prenom` varchar(40) DEFAULT NULL,
+  KEY `nom` (`nom`,`prenom`),
+  CONSTRAINT `revenue_ibfk_1` FOREIGN KEY (`nom`, `prenom`) REFERENCES `acteur` (`nom`, `prenom`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci 
++---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.02 sec)
+
+mysql insert into revenu values
+    - (1,30000000,34.5,2022);
+ERROR 1146 (42S02) Table 'hollywood.revenu' doesn't exist
+mysql insert into revenue values
+    - (1,30000000,34.5,2022);
+ERROR 1136 (21S01) Column count doesn't match value count at row 1
+mysql insert into revenue values
+    - (1,30000000,34.5,2022,farah,saiza);
+Query OK, 1 row affected (0.15 sec)
+
+mysql select from revenue;
++----------+----------+------------+------+-------+--------+
+ idrevenu  cachet    poucentage  anne  nom    prenom 
++----------+----------+------------+------+-------+--------+
+        1  30000000        34.5  2022  farah  saiza  
++----------+----------+------------+------+-------+--------+
+1 row in set (0.00 sec)
+
+mysql desc film;
++-------------+-------------+------+-----+---------+-------+
+ Field        Type         Null  Key  Default  Extra 
++-------------+-------------+------+-----+---------+-------+
+ idfilm       int          NO    PRI  NULL           
+ titre        varchar(40)  YES        NULL           
+ realisateur  varchar(40)  YES        NULL           
+ scenariste   varchar(40)  YES        NULL           
+ annef        int          YES        NULL           
+ idfilmOrg    int          YES   MUL  NULL           
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+mysql desc acteur;
++---------------+-------------+------+-----+---------+-------+
+ Field          Type         Null  Key  Default  Extra 
++---------------+-------------+------+-----+---------+-------+
+ nom            varchar(40)  NO    PRI  NULL           
+ prenom         varchar(40)  NO    PRI  NULL           
+ DateNaissance  date         YES        NULL           
+ poid           float        YES        NULL           
+ taille         float        YES        NULL           
++---------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql desc filmacteur;
+ERROR 1146 (42S02) Table 'hollywood.filmacteur' doesn't exist
+mysql desc acteurfilm;
++--------+-------------+------+-----+---------+-------+
+ Field   Type         Null  Key  Default  Extra 
++--------+-------------+------+-----+---------+-------+
+ idfilm  int          NO    PRI  NULL           
+ nom     varchar(40)  NO    PRI  NULL           
+ prenom  varchar(40)  NO    PRI  NULL           
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql desc  revenue;
++------------+-------------+------+-----+---------+-------+
+ Field       Type         Null  Key  Default  Extra 
++------------+-------------+------+-----+---------+-------+
+ idrevenu    int          YES        NULL           
+ cachet      int          YES        NULL           
+ poucentage  float        YES        NULL           
+ anne        int          YES        NULL           
+ nom         varchar(40)  YES   MUL  NULL           
+ prenom      varchar(40)  YES        NULL           
++------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql desc producteur;
++---------+-------------+------+-----+---------+-------+
+ Field    Type         Null  Key  Default  Extra 
++---------+-------------+------+-----+---------+-------+
+ nomprod  varchar(40)  NO    PRI  NULL           
+ adresse  varchar(40)  YES        NULL           
++---------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql desc producteur;
++---------+-------------+------+-----+---------+-------+
+ Field    Type         Null  Key  Default  Extra 
++---------+-------------+------+-----+---------+-------+
+ nomprod  varchar(40)  NO    PRI  NULL           
+ adresse  varchar(40)  YES        NULL           
++---------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql show tables;
++---------------------+
+ Tables_in_hollywood 
++---------------------+
+ acteur              
+ acteurfilm          
+ film                
+ filmprod            
+ producteur          
+ revenue             
++---------------------+
+6 rows in set (0.00 sec)
+
+mysql desc acteur;
++---------------+-------------+------+-----+---------+-------+
+ Field          Type         Null  Key  Default  Extra 
++---------------+-------------+------+-----+---------+-------+
+ nom            varchar(40)  NO    PRI  NULL           
+ prenom         varchar(40)  NO    PRI  NULL           
+ DateNaissance  date         YES        NULL           
+ poid           float        YES        NULL           
+ taille         float        YES        NULL           
++---------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql desc film;
++-------------+-------------+------+-----+---------+-------+
+ Field        Type         Null  Key  Default  Extra 
++-------------+-------------+------+-----+---------+-------+
+ idfilm       int          NO    PRI  NULL           
+ titre        varchar(40)  YES        NULL           
+ realisateur  varchar(40)  YES        NULL           
+ scenariste   varchar(40)  YES        NULL           
+ annef        int          YES        NULL           
+ idfilmOrg    int          YES   MUL  NULL           
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql desc acteurfilm;
++--------+-------------+------+-----+---------+-------+
+ Field   Type         Null  Key  Default  Extra 
++--------+-------------+------+-----+---------+-------+
+ idfilm  int          NO    PRI  NULL           
+ nom     varchar(40)  NO    PRI  NULL           
+ prenom  varchar(40)  NO    PRI  NULL           
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.05 sec)
+
+mysql insert into acteurfilm values
+    - (1,farah,saiza);
+Query OK, 1 row affected (0.07 sec)
+
+mysql select  from acteurfilm
+    - join film where acteurfilm.idfilm =  film.idfilm,
+    - join acteur where acteurfilm.nom  =  acteur.nom,
+    - join prenom where acteurfilm.prenom = acteur.prenom  ;
+ERROR 1064 (42000) You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',
+join acteur where acteurfilm.nom  =  acteur.nom,
+join prenom where acteurfilm.' at line 2
+mysql select  from acteurfilm join film where acteurfilm.idfilm = film.idfilm;
++--------+-------+--------+--------+----------+----------------+------------+-------+-----------+
+ idfilm  nom    prenom  idfilm  titre     realisateur     scenariste  annef  idfilmOrg 
++--------+-------+--------+--------+----------+----------------+------------+-------+-----------+
+      1  farah  saiza        1  wj3 trab  mohamed baraka  tahour       2012          1 
++--------+-------+--------+--------+----------+----------------+------------+-------+-----------+
+1 row in set (0.02 sec)
+
+mysql  select  from acteurfilm join acteur where acteurfilm.nom = acteur.nom;
++--------+-------+--------+-------+--------+---------------+------+--------+
+ idfilm  nom    prenom  nom    prenom  DateNaissance  poid  taille 
++--------+-------+--------+-------+--------+---------------+------+--------+
+      1  farah  saiza   farah  saiza   2002-01-31     70.5    1.65 
++--------+-------+--------+-------+--------+---------------+------+--------+
+1 row in set (0.00 sec)
+
+mysql select  acteurfilm.idfilm from acteurfillm
+    - join  acteur
+    - on  acteurfilm.nom = acteur.nom
+    - join film
+    - on acteurfilm.idfilm = film.idfilm;
+ERROR 1146 (42S02) Table 'hollywood.acteurfillm' doesn't exist
+mysql select  acteurfilm.idfilm from acteurfilm
+    - join  acteur
+    -  on  acteurfilm.nom = acteur.nom
+    -  join film
+    -  on acteurfilm.idfilm = film.idfilm;
++--------+
+ idfilm 
++--------+
+      1 
++--------+
+1 row in set (0.00 sec)
+
+mysql select from acteurfilm
+    - join  acteur
+    -  on  acteurfilm.nom = acteur.nom
+    - join film
+    - on acteurfilm.idfilm = film.idfilm;
++--------+-------+--------+-------+--------+---------------+------+--------+--------+----------+----------------+------------+-------+-----------+
+ idfilm  nom    prenom  nom    prenom  DateNaissance  poid  taille  idfilm  titre     realisateur     scenariste  annef  idfilmOrg 
++--------+-------+--------+-------+--------+---------------+------+--------+--------+----------+----------------+------------+-------+-----------+
+      1  farah  saiza   farah  saiza   2002-01-31     70.5    1.65       1  wj3 trab  mohamed baraka  tahour       2012          1 
++--------+-------+--------+-------+--------+---------------+------+--------+--------+----------+----------------+------------+-------+-----------+
+1 row in set (0.00 sec)
+
+mysql
